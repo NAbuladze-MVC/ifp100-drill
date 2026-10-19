@@ -1,0 +1,505 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<style>
+:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+body{margin:0;font:14px -apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif}
+img{max-width:100%}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<title>IFP100 Drill Room</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,400&family=Archivo:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: a deck picker, then one large card at a time that you turn over. */
+:root{
+  --bg:#ECEEF0; --surface:#FFFFFF; --sunk:#E0E4E8; --line:#D2D8DE;
+  --ink:#10161A; --muted:#5A6672; --faint:#8E99A4;
+  --nav:#15202B;
+  --good:#166C4A; --goodbg:#E2F1EA; --bad:#9C2B2B; --badbg:#F7E7E7;
+  --shadow:0 1px 2px rgba(12,20,28,.06),0 8px 26px -12px rgba(12,20,28,.22);
+  --display:'Fraunces',Georgia,serif;
+  --ui:'Archivo',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  /* one colour per lecture, following the commodity: cola, beer, beer, corn, corn, spice */
+  --l1:#B0302C; --l2:#B9811B; --l3:#8E6410; --l4:#4C7A38; --l5:#2C6959; --l6:#A1472A;
+  --l1b:#F7E7E6; --l2b:#F8EEDC; --l3b:#F3EADA; --l4b:#E8F0E4; --l5b:#E0EDE9; --l6b:#F7E9E3;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0C1013; --surface:#171D22; --sunk:#1F262C; --line:#2C353D;
+  --ink:#E9EDF1; --muted:#9BA7B3; --faint:#78848F;
+  --nav:#0A0E11;
+  --good:#5CC795; --goodbg:#11291E; --bad:#EE7E76; --badbg:#2D1718;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 10px 30px -14px rgba(0,0,0,.7);
+  --l1:#E8726C; --l2:#E0A94A; --l3:#C9972F; --l4:#84B86C; --l5:#58A991; --l6:#DC8260;
+  --l1b:#2A1817; --l2b:#2A2113; --l3b:#272013; --l4b:#1A2618; --l5b:#12251F; --l6b:#2A1A14;
+  color-scheme:dark;}}
+:root[data-theme="dark"]{
+  --bg:#0C1013; --surface:#171D22; --sunk:#1F262C; --line:#2C353D;
+  --ink:#E9EDF1; --muted:#9BA7B3; --faint:#78848F;
+  --nav:#0A0E11;
+  --good:#5CC795; --goodbg:#11291E; --bad:#EE7E76; --badbg:#2D1718;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 10px 30px -14px rgba(0,0,0,.7);
+  --l1:#E8726C; --l2:#E0A94A; --l3:#C9972F; --l4:#84B86C; --l5:#58A991; --l6:#DC8260;
+  --l1b:#2A1817; --l2b:#2A2113; --l3b:#272013; --l4b:#1A2618; --l5b:#12251F; --l6b:#2A1A14;
+  color-scheme:dark;}
+
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--ui);font-size:16px;line-height:1.5;
+ -webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent}
+h1,h2,h3,p{margin:0;text-wrap:balance}
+button{font:inherit;color:inherit;cursor:pointer;border:none;background:none}
+:focus-visible{outline:2.5px solid currentColor;outline-offset:3px;border-radius:6px}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+
+.wrap{max-width:760px;margin:0 auto;padding-block:22px 60px;
+ padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+
+/* ---------- masthead ---------- */
+.mast{display:flex;align-items:center;gap:14px;margin-bottom:26px}
+.mark{width:42px;height:42px;flex:none;border-radius:11px;background:var(--nav);display:grid;place-items:center}
+.mark span{font-family:var(--display);font-weight:700;font-size:19px;color:#fff;line-height:1}
+.mtext .k{font-size:10px;font-weight:700;letter-spacing:2.2px;text-transform:uppercase;color:var(--faint)}
+.mtext .t{font-family:var(--display);font-size:25px;font-weight:600;letter-spacing:-.4px;line-height:1.15}
+.mast .sp{flex:1 1 auto;min-width:0}
+.ghost{border:1.5px solid var(--line);border-radius:999px;padding:7px 15px;font-size:13.5px;font-weight:600;
+ color:var(--muted);transition:border-color .15s,color .15s}
+.ghost:hover{border-color:var(--ink);color:var(--ink)}
+
+/* ---------- home ---------- */
+.hero{font-family:var(--display);font-size:clamp(26px,5.4vw,36px);font-weight:600;line-height:1.15;
+ letter-spacing:-.6px;margin-bottom:8px}
+.sub{color:var(--muted);font-size:15px;max-width:52ch;margin-bottom:24px}
+.secl{font-size:10.5px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--faint);
+ margin:0 0 11px}
+.decks{display:grid;grid-template-columns:repeat(auto-fit,minmax(218px,1fr));gap:11px;margin-bottom:26px}
+.deck{position:relative;text-align:left;background:var(--surface);border:1.5px solid var(--line);
+ border-radius:15px;padding:15px 16px 14px;transition:border-color .15s,transform .12s;overflow:hidden}
+.deck:hover{transform:translateY(-2px)}
+.deck[aria-pressed="true"]{border-color:var(--dc)}
+.deck .bar{position:absolute;inset:0 auto 0 0;width:4px;background:var(--dc)}
+.deck .no{font-family:var(--display);font-size:11px;font-weight:700;letter-spacing:1.6px;text-transform:uppercase;
+ color:var(--dc);margin-bottom:5px;padding-left:7px}
+.deck .nm{font-family:var(--display);font-size:17.5px;font-weight:600;line-height:1.22;letter-spacing:-.2px;
+ padding-left:7px;margin-bottom:11px}
+.deck .ft{display:flex;align-items:center;gap:9px;padding-left:7px}
+.deck .ring{width:26px;height:26px;flex:none}
+.deck .cnt{font-size:12.5px;color:var(--muted);font-variant-numeric:tabular-nums}
+.deck .tick{position:absolute;top:13px;right:14px;width:17px;height:17px;border-radius:999px;
+ border:1.5px solid var(--line);display:grid;place-items:center}
+.deck[aria-pressed="true"] .tick{background:var(--dc);border-color:var(--dc)}
+.deck[aria-pressed="true"] .tick::after{content:"";width:5px;height:9px;border:solid #fff;border-width:0 2px 2px 0;
+ transform:rotate(45deg) translate(-1px,-1px)}
+
+.modes{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:24px}
+.mode{flex:1 1 180px;text-align:left;background:var(--surface);border:1.5px solid var(--line);border-radius:13px;
+ padding:13px 15px;transition:border-color .15s}
+.mode[aria-pressed="true"]{border-color:var(--ink);background:var(--ink);color:var(--bg)}
+.mode .mt{font-weight:700;font-size:14.5px;margin-bottom:2px}
+.mode .md{font-size:12.5px;opacity:.72;line-height:1.35}
+
+.go{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.cta{background:var(--nav);color:#fff;border-radius:999px;padding:13px 28px;font-size:15.5px;font-weight:700;
+ transition:opacity .15s}
+.cta:hover{opacity:.88}
+.cta[disabled]{opacity:.35;cursor:not-allowed}
+.tiny{font-size:12.5px;color:var(--faint)}
+
+.about{margin-top:30px;border-top:1px solid var(--line);padding-top:18px;display:grid;
+ grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:18px}
+.about h3{font-family:var(--display);font-size:15.5px;font-weight:600;margin-bottom:4px}
+.about p{font-size:13.2px;color:var(--muted);line-height:1.5}
+
+/* ---------- play ---------- */
+.hud{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.hud .lbl{font-size:11px;font-weight:700;letter-spacing:1.6px;text-transform:uppercase;color:var(--faint);
+ font-variant-numeric:tabular-nums;white-space:nowrap}
+.track{flex:1 1 auto;min-width:0;height:5px;border-radius:999px;background:var(--sunk);overflow:hidden}
+.track i{display:block;height:100%;background:var(--ink);width:0;transition:width .35s ease}
+
+.scene{perspective:1600px;margin-bottom:16px}
+.flip{position:relative;width:100%;height:clamp(350px,56vh,500px);transform-style:preserve-3d;
+ transition:transform .55s cubic-bezier(.2,.7,.25,1)}
+.flip.on{transform:rotateY(180deg)}
+.face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;
+ background:var(--surface);border:1.5px solid var(--line);border-radius:20px;box-shadow:var(--shadow);
+ display:flex;flex-direction:column;overflow:hidden}
+.face.b{transform:rotateY(180deg)}
+.cap{flex:none;display:flex;align-items:center;justify-content:space-between;gap:10px;
+ padding:13px 20px;border-bottom:1.5px solid var(--line);background:var(--cb)}
+.cap .who{font-size:10.5px;font-weight:700;letter-spacing:1.7px;text-transform:uppercase;color:var(--cc);
+ min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cap .bx{font-size:10.5px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;color:var(--faint);
+ flex:none;font-variant-numeric:tabular-nums}
+.body{flex:1 1 auto;min-height:0;overflow-y:auto;padding:22px 24px 24px;scrollbar-width:thin}
+.ask{font-family:var(--display);font-size:clamp(19px,3.2vw,24px);font-weight:600;line-height:1.3;
+ letter-spacing:-.25px}
+.termname{font-family:var(--display);font-size:clamp(27px,5.6vw,40px);font-weight:700;line-height:1.1;
+ letter-spacing:-.9px;color:var(--cc);margin-bottom:10px}
+.termask{font-size:14.5px;color:var(--muted)}
+.hintmoves{list-style:none;padding:0;margin:18px 0 0;display:grid;gap:7px}
+.hintmoves li{display:flex;gap:9px;font-size:13.2px;color:var(--muted)}
+.hintmoves .n{flex:none;width:18px;height:18px;border-radius:999px;background:var(--sunk);color:var(--faint);
+ font-size:10px;font-weight:700;display:grid;place-items:center;margin-top:2px}
+.ansline{font-family:var(--display);font-size:clamp(18px,3vw,22px);font-weight:600;line-height:1.3;
+ color:var(--good);margin-bottom:12px}
+.expl{font-size:15px;line-height:1.6;color:var(--ink)}
+.model{font-size:14.3px;line-height:1.62;color:var(--ink)}
+.flipcue{flex:none;padding:11px 20px;border-top:1.5px solid var(--line);font-size:12.5px;color:var(--faint);
+ display:flex;justify-content:space-between;gap:10px;align-items:center}
+kbd{font-family:var(--ui);font-size:11px;background:var(--sunk);border-radius:4px;padding:2px 6px;
+ color:var(--muted);font-weight:600}
+
+.acts{display:flex;gap:10px;flex-wrap:wrap}
+.act{flex:1 1 150px;border-radius:13px;padding:14px 18px;font-size:15px;font-weight:700;
+ border:1.5px solid var(--line);background:var(--surface);transition:transform .12s,border-color .15s}
+.act:hover{transform:translateY(-1px)}
+.act.again{color:var(--bad);border-color:var(--bad)}
+.act.got{color:#fff;background:var(--good);border-color:var(--good)}
+.act.turn{background:var(--nav);color:#fff;border-color:var(--nav)}
+
+/* quiz options */
+.opts{display:grid;gap:9px}
+.opt{display:flex;gap:12px;align-items:flex-start;text-align:left;width:100%;background:var(--bg);
+ border:1.5px solid var(--line);border-radius:12px;padding:12px 14px;font-size:14.8px;line-height:1.42;
+ transition:border-color .15s,background .15s}
+.opt:hover:not(:disabled){border-color:var(--cc)}
+.opt:disabled{cursor:default}
+.opt .k{flex:none;width:23px;height:23px;border-radius:7px;background:var(--sunk);color:var(--faint);
+ font-size:11.5px;font-weight:700;display:grid;place-items:center;margin-top:1px}
+.opt.r{background:var(--goodbg);border-color:var(--good)} .opt.r .k{background:var(--good);color:#fff}
+.opt.w{background:var(--badbg);border-color:var(--bad)} .opt.w .k{background:var(--bad);color:#fff}
+
+/* ---------- done ---------- */
+.sheet{background:var(--surface);border:1.5px solid var(--line);border-radius:20px;padding:26px;
+ box-shadow:var(--shadow)}
+.big{font-family:var(--display);font-size:clamp(38px,9vw,58px);font-weight:700;letter-spacing:-2px;
+ line-height:1;margin:8px 0 6px;font-variant-numeric:tabular-nums}
+.verdict{font-size:15.5px;color:var(--muted);max-width:48ch;margin-bottom:20px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:10px;margin-bottom:20px}
+.stat{background:var(--bg);border-radius:12px;padding:12px 14px}
+.stat .v{font-family:var(--display);font-size:24px;font-weight:700;font-variant-numeric:tabular-nums;line-height:1.1}
+.stat .l{font-size:11px;font-weight:700;letter-spacing:1.3px;text-transform:uppercase;color:var(--faint);
+ margin-top:3px}
+.missed{border-top:1.5px solid var(--line);padding-top:16px;margin-bottom:20px}
+.missed h3{font-size:10.5px;font-weight:700;letter-spacing:1.8px;text-transform:uppercase;color:var(--bad);
+ margin-bottom:10px}
+.missed ol{margin:0;padding-left:18px;display:grid;gap:7px}
+.missed li{font-size:14px;color:var(--muted);line-height:1.45}
+.missed li b{color:var(--ink);font-weight:600}
+</style>
+
+<div class="wrap">
+
+  <div class="mast">
+    <div class="mark"><span>IFP</span></div>
+    <div class="mtext">
+      <div class="k">IFP100Y1 &middot; Themes in World History</div>
+      <div class="t">The Drill Room</div>
+    </div>
+    <div class="sp"></div>
+    <button class="ghost" id="leave" hidden>End</button>
+  </div>
+
+  <!-- ================= HOME ================= -->
+  <section id="home">
+    <h1 class="hero">Answer first. Then turn it over.</h1>
+    <p class="sub">Sixty-nine questions, built from the lectures, the slides and the assigned readings of this
+      course and nothing else. Every card turns over to the answer and the reason behind it &mdash; whether you
+      got it right or wrong, because the reason is the part worth knowing.</p>
+
+    <p class="secl">Choose your lectures</p>
+    <div class="decks" id="decks"></div>
+
+    <p class="secl">How many this round</p>
+    <div class="modes" id="lens">
+      <button class="mode" data-len="10" aria-pressed="true">
+        <div class="mt">Ten</div><div class="md">A short round. Good before bed.</div></button>
+      <button class="mode" data-len="20" aria-pressed="false">
+        <div class="mt">Twenty</div><div class="md">A proper session.</div></button>
+      <button class="mode" data-len="0" aria-pressed="false">
+        <div class="mt">Everything</div><div class="md">The whole deck you have selected.</div></button>
+    </div>
+
+    <div class="go">
+      <button class="cta" id="start">Start</button>
+      <span class="tiny" id="ready"></span>
+      <span class="sp"></span>
+      <button class="ghost" id="reset">Reset progress</button>
+    </div>
+
+    <div class="about">
+      <div>
+        <h3>Why it repeats</h3>
+        <p>Each question sits in one of five boxes. Miss it and it drops to box 1 and comes back soon; get it
+        right and it moves up. Rounds always deal from your lowest boxes first, so you see most of what you
+        know least.</p>
+      </div>
+      <div>
+        <h3>Why it shuffles</h3>
+        <p>Lectures are mixed rather than worked through one at a time. Jumping between topics feels harder and
+        holds better &mdash; which is also how the test is set.</p>
+      </div>
+      <div>
+        <h3>Where your progress lives</h3>
+        <p id="savenote">In this browser, on this device. Anyone you send the link to gets the same deck and
+        keeps their own score.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= PLAY ================= -->
+  <section id="play" hidden>
+    <div class="hud">
+      <span class="lbl" id="pos">1 / 10</span>
+      <span class="track"><i id="bar"></i></span>
+      <span class="lbl" id="hit">0 right</span>
+    </div>
+    <div class="scene">
+      <div class="flip" id="flip">
+        <div class="face f" id="faceA"></div>
+        <div class="face b" id="faceB"></div>
+      </div>
+    </div>
+    <div class="acts" id="acts"></div>
+  </section>
+
+  <!-- ================= DONE ================= -->
+  <section id="done" hidden>
+    <div class="sheet">
+      <p class="secl">Round complete</p>
+      <div class="big" id="pct">0%</div>
+      <p class="verdict" id="verdict"></p>
+      <div class="stats" id="stats"></div>
+      <div class="missed" id="missed" hidden><h3>Worth another look</h3><ol id="misslist"></ol></div>
+      <div class="go">
+        <button class="cta" id="again">Go again</button>
+        <button class="ghost" id="home2">Change the deck</button>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script id="bank" type="application/json">{"mcq":[{"id":"m0","c":1,"q":"What is Steger's definition of globalization?","o":["The growth of world trade after 1945","The replacement of local cultures by global ones","The spread of Western products to every country","The process of moving from nationality to globality"],"a":3,"w":"Globalization is the move from nationality to globality — globality being a social condition of tight global economic, political, cultural and environmental interconnection. The other options describe effects commonly associated with globalization rather than the definition itself."},{"id":"m1","c":1,"q":"Why is globalization best understood as designed rather than inevitable?","o":["Because transport and communication improved only slowly","Because it has reversed several times since 1945","Because the connections were deliberately broken between the wars and deliberately rebuilt in 1944","Because many countries still resist it"],"a":2,"w":"The whole system is human-designed: people had to make decisions, draw up plans and implement them. The 1930s show the connections being cut, and Bretton Woods in 1944 shows them being rebuilt on purpose."},{"id":"m2","c":1,"q":"What happened at Bretton Woods in 1944?","o":["Coca-Cola opened its first overseas bottling plants","World trade was measured for the first time","The United Nations was founded","The winners of the war met to design the post-war economic order on purpose"],"a":3,"w":"The meeting took place before the war had even ended, with two aims: prevent another Depression, and rebuild economic connection deliberately — partly because interconnected countries are less likely to go to war, since both sides lose."},{"id":"m3","c":1,"q":"What does the prefix in 'interdependence' signal?","o":["That the dependence is economic rather than political","That the dependence runs in both directions","That the dependence is recent","That one country depends on many others"],"a":1,"w":"Dependence is one-directional; inter-dependence runs both ways, as in inter-national, between nations. The prefix matters because the entire course is about connection that travels in both directions."},{"id":"m4","c":1,"q":"What was patent medicine?","o":["Remedies made and sold by individuals with no oversight, regulation or testing","Medicine sold under a brand name in pharmacies","Medicine protected by a government patent","Early pharmaceutical products sold only by doctors"],"a":0,"w":"No control, no oversight, no testing — today they would be called fraudulent. The word patent is misleading: these were not patented in any legal sense."},{"id":"m5","c":1,"q":"Why did the patent medicine industry invent modern advertising?","o":["Because newspapers offered them free space","Because the government required warning labels","Because doctors refused to recommend them","Because the remedies were cheap to make and hundreds competed, so the money went into the label, name and slogan"],"a":3,"w":"With two hundred headache cures on the market and almost no barrier to entry, the only way to be chosen was the packaging and the slogan. Coca-Cola was born inside that industry and inherited its methods."},{"id":"m6","c":1,"q":"Who created Coca-Cola, where, when, and as what?","o":["John Pemberton, Georgia, 1886, as a tonic wine","John Pemberton, Atlanta, 1886, as a headache medicine","Robert Woodruff, Georgia, 1923, as a refreshment","Asa Candler, Atlanta, 1892, as a soft drink"],"a":1,"w":"Pemberton was a pharmacist trying to break into the patent medicine business. Who, where, when and what it originally was — that is the exact shape a full-mark identification takes."},{"id":"m7","c":1,"q":"What made Coca-Cola global?","o":["Bottling plants opened at American military bases on every continent during the Second World War","Export agreements signed at Bretton Woods","Advertising in the 1930s","The end of Prohibition"],"a":0,"w":"Advertising made it national by the 1930s; the war made it global. The wartime promise was a bottle for every man in uniform for five cents wherever he was, and the plants followed the army."},{"id":"m8","c":1,"q":"How should a Wikipedia entry be used as a source in academic work?","o":["Cited directly, since entries are checked by experts","As a first source only, following its citations out to the original and using that","Only for dates and figures","It should never be used, because anyone can edit it"],"a":1,"w":"An entry may have been written by a world expert or by a school student, and there is no way to tell which. What makes it usable is that it must cite its sources, so the move is to follow the citation to the original and name that."},{"id":"m9","c":2,"q":"Why do historians now prefer 'hunter-gatherer society' to 'Old Stone Age'?","o":["Because stone tools were not used in every region","Because stone tools were simply the evidence that survived, not the most important feature of the society","Because the period is older than once thought","Because 'Stone Age' is now considered offensive"],"a":1,"w":"The old name came from what archaeologists happened to dig up. The name of a historical period tells you as much about the surviving evidence as it does about the people."},{"id":"m10","c":2,"q":"What does domestication mean?","o":["Moving wild species into new environments","Breeding and caring for wild plants and animals until they become dependent on humans","Selecting plants with the largest seeds","Keeping animals in enclosures near a settlement"],"a":1,"w":"The clause most answers drop is dependence. Instead of killing every animal you find, you capture some, breed them and feed them, and over generations they can no longer live without humans."},{"id":"m11","c":2,"q":"Why is the Fertile Crescent called an accident of geography?","o":["Because after the ice age it held the wild ancestors of sheep, goats, cattle and pigs alongside wild wheat and barley in the same place","Because it lay on the route out of Africa","Because the rivers flooded predictably","Because its soil was unusually rich"],"a":0,"w":"Plenty to hunt and plenty of edible plants together, by chance, in one region. Nothing about it was planned; the geography simply made agriculture possible there first."},{"id":"m12","c":2,"q":"What first encouraged people to stay in one place?","o":["The end of the ice age","The invention of pottery","The domestication of animals","The ability to store cereal grains for months"],"a":3,"w":"Grain keeps where fruit and vegetables do not. Storage comes first, settlement follows, and farming comes after that — people first stayed put around wild grain they had not planted."},{"id":"m13","c":2,"q":"What is the correct chain from wet grain to beer?","o":["Grain is ground, mixed with honey, and left to ferment","Grain ferments, then sprouts, then yeast adds alcohol","Grain sprouts, starch becomes maltose sugar, airborne yeast ferments the sugar into alcohol","Grain is boiled, then yeast is added, then it is stored"],"a":2,"w":"Two accidents in sequence: wet grain sprouts and tastes sweet as starch converts to maltose, and left longer the wild yeast in the air and in the container ferments that sugar into alcohol."},{"id":"m14","c":2,"q":"Why did boiling matter in the history of beer?","o":["It converted more starch to sugar, and as an unintended effect it made the drink safe","It allowed beer to be transported","It was required by Egyptian law","It improved the flavour"],"a":0,"w":"Boiling was adopted to get more alcohol; the safety was accidental. It mattered because settled cities polluted their own water supply, so people fell ill from water and not from beer."},{"id":"m15","c":2,"q":"Which of these is NOT one of the four theories offered for the transition to agriculture?","o":["Climate change","The invention of pottery","Population growth","Less hunting available"],"a":1,"w":"The four are climate change, less hunting available, population growth, and the discovery of beer. Pottery is not among them."},{"id":"m16","c":2,"q":"What is the careful version of the beer-and-agriculture hypothesis?","o":["Beer was the only reason people began to farm","Beer and farming were invented at the same moment","Beer may have been discovered before agriculture using wild grain, and farming was adopted in part to secure the supply","Beer was invented after farming began, as a use for surplus grain"],"a":2,"w":"In part, not entirely — and nobody knows. Stating that the causation is genuinely open is the sophisticated answer; claiming beer caused agriculture outright overstates the evidence."},{"id":"m17","c":2,"q":"Why is there more surviving evidence about ancient wine than ancient beer?","o":["Wine was traded over longer distances","Wine leaves more residue in the containers that stored it","Wine was more popular","Wine was written about more often"],"a":1,"w":"What survives is not a fair sample of what existed. Finding more of one thing does not mean there was more of it — a point that applies to every commodity in the course."},{"id":"m18","c":2,"q":"Why did Sumerians drink beer through long straws?","o":["Because the earliest beer was unfiltered, so the grain floated on top and the clean liquid was at the bottom","Because sharing a straw was a mark of trust","Because straws were a sign of status","Because the containers were too hot to lift"],"a":0,"w":"It began as a technical necessity. By the date of the famous Sumerian image beer could already be strained and served in cups, and the straws were still drawn — the necessity had become a ritual."},{"id":"m19","c":2,"q":"In the Epic of Gilgamesh, what makes Enkidu human?","o":["Washing and oiling himself","Leaving the wild","Meeting Gilgamesh","Eating bread and drinking beer — the products of agriculture"],"a":3,"w":"Entering settled society and consuming what agriculture produces are the same act in the story. The washing and oiling follow the beer; they are not the cause."},{"id":"m20","c":2,"q":"Why was writing invented?","o":["To keep administrative records once thousands of people lived in one city","To record stories and poems","To write down brewing recipes","To record religious ritual"],"a":0,"w":"Stories passed down perfectly well without writing. A settlement of forty people needs no records; a city of nine thousand does — and the sign for beer appears constantly in the earliest tablets from Uruk."},{"id":"m21","c":2,"q":"What do the pyramid wage records show?","o":["That Egyptian beer was weaker than Mesopotamian beer","That the workers were hired and paid, not enslaved","That the pyramids took longer than once believed","That beer was rationed only to supervisors"],"a":1,"w":"Three to four loaves and two jugs — about four litres — of beer per labourer. A group working on the third pyramid called themselves the drunkards of Menkaure. People who are paid are not slaves."},{"id":"m22","c":3,"q":"What is the central trend in the modern history of beer?","o":["Beer became more varied as it spread worldwide","Beer went local to global and became generic, and the craft reaction against that was itself made possible by global networks","Beer resisted globalization better than other drinks","Beer became global only after refrigeration made trade possible"],"a":1,"w":"The second half is the part that matters: the reaction against the global was only possible because of the global flows of information that created the problem. Local and global are not opposites."},{"id":"m23","c":3,"q":"What are the two factors in the spread of beer?","o":["Climate and population","Cross-cultural contact and geography","Trade and conquest","Religion and technology"],"a":1,"w":"Contact carried the knowledge, because beer itself could not survive long-distance travel; geography then decided where it flourished."},{"id":"m24","c":3,"q":"In what order did knowledge of brewing pass between civilizations?","o":["Babylonians → Greeks → Egyptians → Romans → Europeans","Babylonians → Egyptians → Greeks → Romans → Europeans","Greeks → Egyptians → Babylonians → Romans → Europeans","Egyptians → Babylonians → Romans → Greeks → Europeans"],"a":1,"w":"It starts in Mesopotamia, the first agricultural civilization, and ends with the Europeans who carried beer around the world after the sixteenth century."},{"id":"m25","c":3,"q":"Why does northern Europe prefer beer and southern Europe wine?","o":["Mainly climate — the north is too cold for grapes, while barley, wheat and rye grow well there","Because monasteries were only built in the north","Because of the languages spoken","Because of Roman settlement patterns"],"a":0,"w":"Language and culture play some part, but the weight is on climate. The same logic returns with sugar, which came from Asia and flourished in the Caribbean."},{"id":"m26","c":3,"q":"What proportion of Egyptian grain production went into beer?","o":["25 per cent","60 per cent","40 per cent","10 per cent"],"a":2,"w":"Forty per cent — one of several signs that beer mattered to every rank of Egyptian society. Beer also appeared in over a hundred medical prescriptions, and a sip offered to a woman constituted marriage."},{"id":"m27","c":3,"q":"Why did the Greeks look down on beer?","o":["It was associated with slaves","They considered it effeminate, and held that wine was the drink of culture and civilization","It was more expensive than wine","It was forbidden in religious ritual"],"a":1,"w":"From the Latin femina, a woman — a serious insult in a strongly patriarchal society. Rome inherited the bias and called beer a drink for barbarians, yet still spread it across the empire."},{"id":"m28","c":3,"q":"What did monasteries contribute to beer?","o":["They invented hops","They raised its quality — organised, literate, written recipes, clean equipment, and devotion shown through good work","They first brewed lager","They made beer legal again after Rome fell"],"a":1,"w":"After Rome collapsed, most brewing moved into monasteries. St Benedict's rule of self-sufficiency, from Monte Cassino in 525 CE, is why: a monastery made everything it needed."},{"id":"m29","c":3,"q":"What is the real difference between an ale and a lager?","o":["Ale contains hops and lager does not","Lager is filtered and ale is not","Ale uses barley and lager uses wheat","The temperature at brewing, which changes whether the yeast works at the top or the bottom"],"a":3,"w":"Not the recipe — the conditions. Bavarian brewers storing beer in cold Alpine caves from the 1400s noticed a crisper taste, and centuries later the cause was identified as bottom-fermenting yeast. Pilsner is a type of lager."},{"id":"m30","c":3,"q":"What did the German Purity Law of 1516 permit, and what is missing?","o":["Wheat, hops and water — barley was excluded","Barley, water and yeast — hops were added later","Barley, hops and water — yeast is missing because it had not yet been discovered","Barley, hops, water and yeast — nothing is missing"],"a":2,"w":"Yeast was only identified in the nineteenth century, once microorganisms could be seen. The law was a response to falling quality in Bavaria."},{"id":"m31","c":3,"q":"What did Prohibition accidentally teach American brewers?","o":["Canning, because many switched to soft drinks — which is where canned beer comes from","How to make lager more cheaply","How to export to Canada","How to brew without hops"],"a":0,"w":"A ban on a product taught the industry a technology it could not otherwise have had. Those that stayed in beer made near beer, under 0.5 per cent alcohol."},{"id":"m32","c":3,"q":"Which pair of figures measures the consolidation of the beer industry?","o":["The top ten held 50 per cent in 1945 and 80 per cent in 1975","The top ten held 60 per cent in 1950 and 95 per cent in 2000","The top ten held 38 per cent of sales in 1950 and 93 per cent in 1980","The top five held 25 per cent in 1960 and 70 per cent in 1990"],"a":2,"w":"38 then 93. Before consolidation most beer was local and tastes varied enormously; afterwards a few companies concentrated on one type — what scholars call the decline of distinction."},{"id":"m33","c":3,"q":"What are Pilcher's four characteristics of craft beer?","o":["Flavour, strength, variety, community","Flavour, local identity, small production, community","Quality, locality, independence, craft","Flavour, price, independence, tradition"],"a":1,"w":"From 'Hop Movements', by Jeffrey Pilcher, who teaches food history at the University of Toronto. He also divides the movement into three periods: 1960–1990, 1990–2010, and 2010 onward."},{"id":"m34","c":3,"q":"Why were Goose Island's customers angry when AB InBev bought it, given the beer was unchanged?","o":["The founder was replaced","The price rose","The brewery moved out of Chicago","Craft beer rests on independence, community and the local, so an identical product owned by the largest brewer means something different"],"a":3,"w":"The founder stayed on as CEO, jobs and brands were kept, and investment was promised. The beer did not change; what the beer meant did. A commodity is never only the thing itself."},{"id":"m35","c":4,"q":"Why is the Bering Strait account of the peopling of the Americas described as a dogma?","o":["Because it was invented in the nineteenth century","Because it is treated as not open to question, while 35,000-year-old sites and Indigenous oral history contradict it","Because no evidence supports it","Because it only explains North America"],"a":1,"w":"A dogma is a belief held as true and treated as beyond question. The theory assumed people 20,000 years ago were too primitive to arrive by sea, and new research now supports what Indigenous peoples have said all along."},{"id":"m36","c":4,"q":"What is the deepest problem with the word 'Indians'?","o":["It confuses the West Indies with the East Indies","It came from Columbus's mistake about India","It puts enormously varied peoples under a single label — a problem that 'natives' and even 'Indigenous peoples' share","It is no longer used in Canada"],"a":2,"w":"Columbus's error explains where the word came from but is not the real difficulty. Nobody accepts that the French and the Germans are the same thing, and the peoples of the Americas were more varied still."},{"id":"m37","c":4,"q":"Which is NOT one of the three general characteristics of the pre-1492 Americas?","o":["A shared religion centred on the sun","Relative isolation from the rest of the world","A lack of large mammals that could be domesticated","A mixture of states, chiefdoms, village farmers and hunter-gatherers"],"a":0,"w":"The first three are the stated characteristics. The lack of domesticable mammals has the longest consequences — it is why the Americas developed so few epidemic diseases."},{"id":"m38","c":4,"q":"What does Zea mays mean?","o":["Wheat-like grass, plus maiz meaning life-giver","Tall grass with ears","Yellow grain of Mexico","Grass of the gods"],"a":0,"w":"Linnaeus's name carries both halves of the story: the European botanical description and the Indigenous meaning. Note the trap — before 1492, European texts use 'corn' to mean grain in general."},{"id":"m39","c":4,"q":"Why are the Three Sisters grown together?","o":["They need the same amount of water","Corn gives the beans something to climb, the beans return nitrogen, and the squash holds moisture and shades out weeds","They deter the same pests","They ripen at the same time"],"a":1,"w":"Eaten together they also make a complete meal, which matters because corn alone lacks key nutrients and a diet of corn alone makes people ill."},{"id":"m40","c":4,"q":"Why is the Three Sisters significant?","o":["It explains why corn spread so quickly to Europe","It proves corn was domesticated in Mexico","It shows that Indigenous societies traded with each other","It is evidence of sophisticated agriculture developed without the large animals and ploughs Europeans assumed were necessary"],"a":3,"w":"It belongs with the wider point that every Indigenous civilization of the Americas built on agriculture has an origin story centred on corn — Inca Mama Sara, the Ojibwe and the Great Spirit."},{"id":"m41","c":4,"q":"How was conquered land divided in the Inca empire?","o":["Equally among the conquered communities","Between the emperor and the priests","Into three: for the sun, for the emperor, and for the people","Between farmland and terraces"],"a":2,"w":"The first thing done with new land was to make it fit for corn — irrigation, levelling, terracing. The Inca origin story has the sun sending the first Inca from Lake Titicaca to Cuzco, where they planted corn."},{"id":"m42","c":4,"q":"Why did disease travel from the Old World to the Americas and not the other way?","o":["Because Europeans travelled in larger numbers","Because of the climate difference","Because many chronic diseases developed from living in close contact with domesticated animals, which the Americas largely lacked","Because Indigenous peoples lived in smaller groups"],"a":2,"w":"Hunter-gatherers did not have these diseases; they arise where humans and farm animals live on top of one another. With no previous exposure and no immunity, mortality in the Americas reached around 90 per cent."},{"id":"m43","c":4,"q":"What problem did corn solve in China?","o":["The cost of importing grain","A series of failed harvests","An ecological peak — population and farmland out of balance by the mid-1600s","A shortage of rice seed"],"a":2,"w":"Corn did not replace rice and was never going to. It needed less labour and grew on marginal land, so the cultivated area could expand: 140 million people in 1650 to 425 million by 1850."},{"id":"m44","c":4,"q":"What did West Africans call corn, and why does that matter?","o":["Spanish wheat — it marks the first European contact","Sea grain — it records its arrival by ship","White millet — it shows what it replaced","Portuguese grain — it names who brought it, and it was promoted as cheap food for enslaved Africans on the slave ships"],"a":3,"w":"Corn produced more than millet or sorghum, so populations grew — but it damages dry soil, causes erosion and needs more water, so the local grains remained better adapted and corn became the cheap food of the poor."},{"id":"m45","c":4,"q":"Why did Europeans resist corn?","o":["The Church discouraged American crops","It has no gluten so it makes no bread, and as porridge it was the food of the poor and of animals — plus a prejudice about where it came from","It would not grow in European soil","It was more expensive than wheat"],"a":1,"w":"A technical reason and a social one together. Italian polenta is the European exception, and it sets up the angu and grits comparison."},{"id":"m46","c":4,"q":"What is the lesson of the angu and grits comparison?","o":["Italian immigration shaped Brazilian food","A simple surface connection is often the wrong one — the real link was enslaved Africans, not Italians","Corn dishes developed independently everywhere","Food names travel further than recipes"],"a":1,"w":"Angu looks like polenta and Brazil had heavy Italian immigration, so the obvious inference is wrong. The same dish appears in the American South, the word itself is West African, and the shared route is the slave trade."},{"id":"m47","c":5,"q":"What two discoveries sent Cheney and Ellis to Iowa?","o":["That their ancestors had farmed there","That corn prices were falling and farms were closing","That Iowa produced more corn than any country","That theirs is the first American generation expected to live shorter lives, and that the main carbon molecule in their bodies comes from corn"],"a":3,"w":"Their ancestry in Iowa is true but is not what starts the film. The guiding question is how an acre of corn gets into your hair."},{"id":"m48","c":5,"q":"What is the single change the whole film turns on?","o":["The invention of high fructose corn syrup","The arrival of genetically modified seed","The 1973 reorientation of US farm policy from curtailment to expansion under Earl Butz","The growth of the feedlot industry"],"a":2,"w":"Before 1973 the government limited production to keep prices stable; after it, farmers were paid by the bushel. Surplus, consolidation, feedlots and corn syrup all follow from that one rule change."},{"id":"m49","c":5,"q":"Of the 10,000 pounds their acre produces, where does most of it go?","o":["Turned into sweeteners — about 4,000 pounds","Fed to animals — about 5,500 pounds","Exported — about 6,000 pounds","Eaten directly by people — about 3,000 pounds"],"a":1,"w":"More than half to animals; about 490 pounds becomes sweeteners; 32 per cent is exported or turned into ethanol. Once it reaches the elevator, following one farmer's crop becomes a game of probabilities."},{"id":"m50","c":5,"q":"What is acidosis, in the context of the film?","o":["A condition in cattle fed corn: acid builds up, the pH drops, and the animal dies if untreated","A soil condition caused by heavy fertiliser","A reaction in the stomach to antibiotics","A disease of corn plants in dense planting"],"a":0,"w":"Cattle evolved to eat grass. Low-dose antibiotics are added to the feed to combat it and to let the animals survive confinement — livestock now consume 70 per cent of the antibiotics used in the United States."},{"id":"m51","c":5,"q":"What does 'commodity corn is not food' mean?","o":["It is unsafe to eat","It is reserved for industrial use by law","It is an inedible raw material that must be processed before anyone can eat it","It is sold only for export"],"a":2,"w":"The filmmakers taste their own crop and it is inedible. This is the pivot of the film, and the setting for the line that an Iowa farmer produces more than his ancestors and can no longer feed himself."},{"id":"m52","c":5,"q":"What are the four modern uses of corn, in order of size?","o":["Animal feed 75%, food 15%, fuel 5%, industry 5%","Fuel 40%, animal feed 30%, export 20%, food 10%","Human food, animal feed, fuel, industry","Animal feed 60–65%, fuel 15–20%, human food 10–15%, additives and industry about 10%"],"a":3,"w":"The categories overlap, so the figures do not add up exactly: about 40 per cent goes into ethanol, but distillers grain — a by-product — is fed back to animals, and some corn is counted twice."},{"id":"m53","c":5,"q":"Why does Mexico, where corn was domesticated, import so much American corn?","o":["Its own harvests have failed","American corn is cheaper to grow than Mexican corn","Trade agreements require it","It imports a different type, for animal feed, while its own corn feeds people"],"a":3,"w":"Demand for meat has grown and Mexico has followed the same industrial practice. The same crop serving different purposes is exactly what makes it a commodity."},{"id":"m54","c":5,"q":"How should King Corn be read as a source?","o":["As a regional study, since it covers only one state","As unverified, since its figures were never checked","As an out-of-date record of the industry","As an advocacy documentary rather than a neutral report — watch for where the filmmakers argue rather than report"],"a":3,"w":"The filmmakers often act as advocates for a cause rather than as unbiased reporters. Identifying where a source is arguing is the critical-reading move the course asks for, and it applies to anything you read or watch."},{"id":"m55","c":5,"q":"What does 'we subsidize the happy meals; we don't subsidize healthy meals' mean?","o":["Every ingredient in the cheap meal is subsidised somewhere along the chain, while vegetables and fresh food are not","School meals are funded but restaurants are not","Healthy food is taxed more heavily","Fast food companies receive direct government payments"],"a":0,"w":"A hamburger under a dollar contains meat and cheese and would not historically have been cheap. The meat is cheap because of how the animals are fed, and the feed is cheap because of the subsidy."},{"id":"m56","c":5,"q":"What is a bushel, and what does one produce?","o":["About 25 kg; about 7 kg of beef, 12 kg of pork or 18 kg of chicken","About 25 litres; about 5 kg of beef","About 50 kg; about 15 kg of beef","About 10 kg; about 3 kg of beef"],"a":0,"w":"The unit corn is measured in. The surrounding vocabulary is acre, subsidy, yield, harvest, corn belt, grain elevator, livestock and high fructose corn syrup."},{"id":"m57","c":6,"q":"What was Columbus doing in 1492?","o":["Claiming new territory for Spain","Looking for gold in a land he knew existed","Sailing west to reach Asia, because of the spice trade","Searching for a route to West Africa"],"a":2,"w":"Europeans did not know the Americas existed, so they could not have known about the gold. Both his voyage and da Gama's are the spice trade; one of them found the Americas by accident."},{"id":"m58","c":6,"q":"Why does European demand matter in the history of spices, given that Europe was a minor player in the trade?","o":["Because Europe consumed more spices than anywhere else","Because European merchants controlled the Indian Ocean","Because that demand drove the search for a direct route, which led to colonisation","Because Europe produced the most valuable spices"],"a":2,"w":"The trade was dominated by and centred on Asia, with Europe at the margins. The European interest matters for its unintended consequences, not for its size."},{"id":"m59","c":6,"q":"What are Freedman's three sources of demand for spices?","o":["Preservation, perfume and status","Flavour, preservation and medicine","Flavour, medicinal properties, and status — conspicuous consumption","Medicine, religion and trade"],"a":2,"w":"Note what is absent: the familiar story that spices were used to disguise rotten meat. Preservation is not one of the three."},{"id":"m60","c":6,"q":"In humoural theory, which pairing is correct?","o":["Black bile — water — spleen — cold & moist","Blood — fire — liver — warm & dry","Phlegm — earth — brain — dry & cold","Yellow bile — fire — gall bladder — warm & dry"],"a":3,"w":"The full table: blood is air, liver, moist and warm, sanguine; yellow bile is fire, gall bladder, warm and dry, choleric; black bile is earth, spleen, dry and cold, melancholic; phlegm is water, brain and lungs, cold and moist, phlegmatic."},{"id":"m61","c":6,"q":"Why was fresh fruit considered dangerous in medieval medicine?","o":["It spoiled quickly in transport","It was associated with the poor","It was thought to carry disease","It was classed as cold and wet, and would push the body's balance too far that way"],"a":3,"w":"Bread and wine were the well-balanced foods. A dangerous food could be corrected in preparation — salt and pepper are dry and hot, so they fix mushrooms; ham corrects melon."},{"id":"m62","c":6,"q":"What does 'conspicuous consumption' mean, and where does the word come from?","o":["Wasteful consumption; from the Latin for excess","Consumption by the elite; from the Latin for rank","Consumption meant to be seen; from the Latin specio, to look at","Consumption of large quantities; from the Latin for abundance"],"a":2,"w":"The point of the purchase is that other people know you have it. The modern equivalents are the latest phone, a very expensive watch, a visible brand."},{"id":"m63","c":6,"q":"Where did nutmeg, cloves and mace grow?","o":["In Sri Lanka","Along the Red Sea coast","Only in the Maluku Islands, in what is now Indonesia","On the Malabar coast of India"],"a":2,"w":"The Malabar coast was the collection point, not the source. Cinnamon came from Sri Lanka — then Ceylon, which is why the original is called Ceylon cinnamon."},{"id":"m64","c":6,"q":"Why were spices so expensive in Europe before 1500?","o":["Because European rulers taxed them heavily","Because demand always exceeded supply","Because the trade moved in stages, each middleman taking a profit, and Arab and Venetian merchants held the final legs","Because they spoiled easily in transit"],"a":2,"w":"Nobody travelled the whole route. The longer the chain, the higher the price — and war in the Middle East disrupted the whole supply, which is the pressure that made a direct route worth finding."},{"id":"m65","c":6,"q":"What did Bartolomeu Dias do, and when?","o":["Discovered Brazil in 1500","Founded the Portuguese trading post at Goa in 1510","Rounded the Cape of Good Hope in 1488, opening the route","Reached Calicut in 1498"],"a":2,"w":"The southern tip of Africa is a volatile stretch of storms and conflicting currents, so rounding it at all was the achievement. Da Gama then reached Calicut on 21 May 1498."},{"id":"m66","c":6,"q":"What did da Gama's second voyage bring back, and at what profit?","o":["1,700 tons of spices — as much as Venice obtained in a year — at about 400 per cent profit","4 million pounds of spices at 45 per cent profit","1,000 tons of pepper at 200 per cent profit","400 tons of spices at 75 per cent profit"],"a":0,"w":"The profit was high not because they undercut the market but because they bought at source and sold at market value. The 75 per cent figure is the Venetians'; the 4 million pounds is the 1496 Venice shipment."},{"id":"m67","c":6,"q":"What was an East India Company?","o":["A partnership of Indian and European merchants","A chartered joint-stock company granted a monopoly on the trade with Asia","A branch of the royal navy that escorted trading ships","A customs authority that taxed imported spices"],"a":1,"w":"The state granted the monopoly but did not own the company. Trading posts, then guards, then armies and navies, then land, then interference in local government — that is how a trade route becomes an empire."},{"id":"m68","c":6,"q":"Why did the European obsession with spices end?","o":["Taste changed, spices stopped being a luxury as supply rose, new luxuries arrived, and medical knowledge changed","The routes were closed by war","Colonial powers banned the trade","The Maluku Islands were exhausted"],"a":0,"w":"Four reasons together. By then the effect on global history had already happened — and the medical claim has partly returned in alternative medicine: turmeric, ginger, cinnamon."}],"ch":{"1":"Globalization and Coca-Cola","2":"Beer and the Origins of Agriculture","3":"Beer and Globalization","4":"Corn and Civilization in the Americas","5":"Corn and the Global Food Industry","6":"Spices: The First Global Commodity"}}</script>
+<script>
+(function(){
+"use strict";
+var B=JSON.parse(document.getElementById('bank').textContent), CH=B.ch;
+var LET=['A','B','C','D'], LS='ifp100-drill-v3';
+var $=function(i){return document.getElementById(i)};
+function el(t,c,x){var e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e}
+function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t}return a}
+
+/* ---------- progress ---------- */
+var P={items:{}}, remote=null, timer=null;
+function rec(id){if(!P.items[id])P.items[id]={box:1,seen:0};return P.items[id]}
+function save(){
+  try{localStorage.setItem(LS,JSON.stringify(P))}catch(e){}
+  if(remote){clearTimeout(timer);timer=setTimeout(function(){remote.set(P).catch(function(){})},800)}
+}
+function loadLocal(){try{var r=localStorage.getItem(LS);if(r){var d=JSON.parse(r);if(d&&d.items)P=d}}catch(e){}}
+function loadRemote(){
+  if(!window.claude||!window.claude.use)return;
+  Promise.all([window.claude.use('db'),window.claude.use('user')]).then(function(a){
+    var db=a[0],u=a[1]; if(!db||!u)return;
+    return u.id().then(function(id){
+      remote=db.collection('data/users/'+id).doc('progress');
+      return remote.get().then(function(s){
+        var d=(s&&s.exists)?s.data():null;
+        if(d&&d.items&&Object.keys(d.items).length>Object.keys(P.items).length){P={items:d.items};paintDecks();}
+        $('savenote').textContent='In your Claude account, so it follows you between devices. Anyone you send the link to gets the same deck and keeps their own score.';
+      });
+    });
+  }).catch(function(){});
+}
+
+/* ---------- state ---------- */
+var S={ch:new Set([1,2,3,4,5,6]),len:10,q:[],i:0,right:0,miss:[],turned:false,marked:false,pending:null};
+function pool(){return B.mcq.filter(function(x){return S.ch.has(x.c)})}
+
+/* ---------- deck picker ---------- */
+function ring(frac,colour){
+  var r=10,c=2*Math.PI*r;
+  return '<svg class="ring" viewBox="0 0 26 26" aria-hidden="true">'+
+    '<circle cx="13" cy="13" r="'+r+'" fill="none" stroke="currentColor" stroke-opacity=".18" stroke-width="3"/>'+
+    '<circle cx="13" cy="13" r="'+r+'" fill="none" stroke="'+colour+'" stroke-width="3" stroke-linecap="round"'+
+    ' stroke-dasharray="'+c.toFixed(1)+'" stroke-dashoffset="'+(c*(1-frac)).toFixed(1)+'"'+
+    ' transform="rotate(-90 13 13)"/></svg>';
+}
+function paintDecks(){
+  var host=$('decks'); host.textContent='';
+  Object.keys(CH).forEach(function(k){
+    var n=+k, col='var(--l'+n+')';
+    var items=B.mcq.filter(function(x){return x.c===n});
+    var done=items.filter(function(x){var r=P.items[x.id];return r&&r.box>=5}).length;
+    var b=document.createElement('button');
+    b.className='deck'; b.style.setProperty('--dc',col);
+    b.setAttribute('aria-pressed',S.ch.has(n)?'true':'false');
+    b.innerHTML='<span class="bar"></span><span class="tick"></span>'+
+      '<div class="no">Lecture '+n+'</div><div class="nm">'+CH[n]+'</div>'+
+      '<div class="ft">'+ring(items.length?done/items.length:0,col)+
+      '<span class="cnt">'+done+' of '+items.length+' mastered</span></div>';
+    b.addEventListener('click',function(){
+      if(S.ch.has(n)){ if(S.ch.size===1)return; S.ch.delete(n); } else S.ch.add(n);
+      paintDecks(); paintReady();
+    });
+    host.appendChild(b);
+  });
+}
+function paintReady(){
+  var n=pool().length, round = S.len>0 ? Math.min(S.len,n) : n;
+  $('ready').textContent = n ? (round+' questions this round · '+n+' selected') : 'Nothing selected';
+  $('start').disabled = !n;
+}
+$('lens').addEventListener('click',function(e){
+  var b=e.target.closest('.mode'); if(!b)return;
+  Array.prototype.forEach.call(this.querySelectorAll('.mode'),function(m){m.setAttribute('aria-pressed',m===b?'true':'false')});
+  S.len=+b.dataset.len; paintReady();
+});
+
+/* ---------- session ---------- */
+function build(){
+  var p=pool().map(function(d){return {d:d,r:rec(d.id)}});
+  shuffle(p);
+  p.sort(function(a,b){return a.r.box-b.r.box || a.r.seen-b.r.seen});
+  var n = S.len>0 ? Math.min(S.len,p.length) : p.length;
+  return shuffle(p.slice(0,n));
+}
+function show(w){['home','play','done'].forEach(function(k){$(k).hidden=(k!==w)});$('leave').hidden=(w!=='play')}
+$('start').addEventListener('click',function(){
+  S.q=build(); if(!S.q.length)return;
+  S.i=0;S.right=0;S.miss=[];
+  show('play'); render(); window.scrollTo({top:0});
+});
+$('again').addEventListener('click',function(){$('start').click()});
+$('home2').addEventListener('click',function(){paintDecks();paintReady();show('home');window.scrollTo({top:0})});
+$('leave').addEventListener('click',finish);
+$('reset').addEventListener('click',function(){P={items:{}};save();paintDecks();paintReady()});
+
+/* ---------- rendering ---------- */
+function render(){
+  S.turned=false;S.marked=false;S.pending=null;
+  var it=S.q[S.i], d=it.d, n=d.c, r=rec(d.id);
+  $('flip').classList.remove('on');
+  $('pos').textContent=(S.i+1)+' / '+S.q.length;
+  $('hit').textContent=S.right+' right';
+  $('bar').style.width=(S.i/S.q.length*100)+'%';
+
+  var A=$('faceA'), Bk=$('faceB');
+  [A,Bk].forEach(function(f){
+    f.textContent='';
+    f.style.setProperty('--cc','var(--l'+n+')');
+    f.style.setProperty('--cb','var(--l'+n+'b)');
+    var cap=el('div','cap');
+    cap.appendChild(el('span','who','Lecture '+n+' · '+CH[n]));
+    cap.appendChild(el('span','bx', r.seen? ('Box '+Math.min(5,r.box)) : 'New'));
+    f.appendChild(cap);
+  });
+
+  var ba=el('div','body'), bb=el('div','body');
+  ba.appendChild(el('p','ask',d.q));
+  var og=el('div','opts'); og.style.marginTop='18px';
+  d.o.forEach(function(t,i){
+    var o=el('button','opt'); o.type='button';
+    o.appendChild(el('span','k',LET[i])); o.appendChild(el('span',null,t));
+    o.addEventListener('click',function(){pick(it,i,og)});
+    og.appendChild(o);
+  });
+  ba.appendChild(og);
+  bb.appendChild(el('p','ansline',LET[d.a]+' · '+d.o[d.a]));
+  bb.appendChild(el('p','expl',d.w));
+  A.appendChild(ba); Bk.appendChild(bb);
+
+  var cueA=el('div','flipcue');
+  cueA.appendChild(el('span',null,'Answer it before you look'));
+  var k1=el('span'); k1.innerHTML='<kbd>1</kbd>&ndash;<kbd>4</kbd> to pick'; cueA.appendChild(k1);
+  A.appendChild(cueA);
+  var cueB=el('div','flipcue');
+  cueB.appendChild(el('span','', 'Read it even when you were right'));
+  var k2=el('span'); k2.innerHTML='<kbd>Enter</kbd> to continue'; cueB.appendChild(k2);
+  Bk.appendChild(cueB);
+
+  acts(it);
+}
+
+function acts(it){
+  var h=$('acts'); h.textContent='';
+  if(!S.turned) return;
+  var nx=el('button','act turn', S.i>=S.q.length-1 ? 'See how you did' : 'Next question');
+  nx.addEventListener('click',function(){mark(it,S.pending)});
+  h.appendChild(nx);
+}
+
+function pick(it,i,og){
+  if(S.turned)return;
+  Array.prototype.forEach.call(og.children,function(o,j){
+    o.disabled=true;
+    if(j===it.d.a)o.classList.add('r'); else if(j===i)o.classList.add('w');
+  });
+  S.pending=(i===it.d.a);
+  setTimeout(function(){ S.turned=true; $('flip').classList.add('on'); acts(it); },430);
+}
+
+function mark(it,ok){
+  if(S.marked)return; S.marked=true;
+  var r=rec(it.d.id); r.seen++; r.box = ok ? Math.min(5,r.box+1) : 1; save();
+  if(ok) S.right++; else S.miss.push(it.d);
+  $('hit').textContent=S.right+' right';
+  if(S.i>=S.q.length-1){ setTimeout(finish,150); return; }
+  S.i++; setTimeout(render,150);
+}
+
+/* ---------- finish ---------- */
+function finish(){
+  var done=Math.min(S.i+(S.marked?1:0),S.q.length)||1;
+  var pc=Math.round(S.right/done*100);
+  $('pct').textContent=pc+'%';
+  $('bar').style.width='100%';
+  var v;
+  if(pc>=90) v='That is an exam mark. Bring in the lectures you have not touched yet.';
+  else if(pc>=70) v='Solid. Read the misses below in the book, then run the same deck again tomorrow.';
+  else if(pc>=50) v='Half of it is in. These lectures want a reread before the next round, not more drilling.';
+  else v='Go back to the chapters first. Drilling before reading only rehearses the gaps.';
+  $('verdict').textContent=v;
+
+  var p=pool(), mastered=p.filter(function(x){var r=P.items[x.id];return r&&r.box>=5}).length;
+  var st=$('stats'); st.textContent='';
+  [[S.right+' / '+done,'This round'],[mastered+' / '+p.length,'Mastered'],[S.miss.length,'To revisit']]
+    .forEach(function(pr){
+      var dv=el('div','stat'); dv.appendChild(el('div','v',String(pr[0]))); dv.appendChild(el('div','l',pr[1])); st.appendChild(dv);
+    });
+
+  var ml=$('misslist'); ml.textContent='';
+  S.miss.forEach(function(d){
+    var li=el('li');
+    li.appendChild(el('b',null,'Lecture '+d.c+' — '));
+    li.appendChild(el('span',null,d.q));
+    ml.appendChild(li);
+  });
+  $('missed').hidden = !S.miss.length;
+  paintDecks(); paintReady(); show('done'); window.scrollTo({top:0});
+}
+
+/* ---------- keyboard ---------- */
+document.addEventListener('keydown',function(e){
+  if($('play').hidden)return;
+  var it=S.q[S.i]; if(!it)return;
+  if(!S.turned){
+    if(e.key>='1'&&e.key<='4'){
+      var o=$('faceA').querySelector('.opts'), b=o&&o.children[+e.key-1];
+      if(b){e.preventDefault();b.click()}
+    }
+  } else if(e.key==='Enter'||e.key===' '){ e.preventDefault(); mark(it,S.pending); }
+});
+
+/* ---------- boot ---------- */
+loadLocal(); paintDecks(); paintReady(); show('home'); loadRemote();
+})();
+</script>
+
+</body>
+</html>
