@@ -122,8 +122,8 @@ button{font:inherit;color:inherit;cursor:pointer;border:none;background:none}
 .track i{display:block;height:100%;background:var(--ink);width:0;transition:width .35s ease}
 
 .scene{perspective:1600px;margin-bottom:16px}
-.flip{position:relative;width:100%;height:clamp(350px,56vh,500px);transform-style:preserve-3d;
- transition:transform .55s cubic-bezier(.2,.7,.25,1)}
+.flip{position:relative;width:100%;min-height:320px;height:360px;transform-style:preserve-3d;
+ transition:transform .55s cubic-bezier(.2,.7,.25,1), height .4s cubic-bezier(.2,.7,.25,1)}
 .flip.on{transform:rotateY(180deg)}
 .face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;
  background:var(--surface);border:1.5px solid var(--line);border-radius:20px;box-shadow:var(--shadow);
@@ -135,7 +135,7 @@ button{font:inherit;color:inherit;cursor:pointer;border:none;background:none}
  min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .cap .bx{font-size:10.5px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;color:var(--faint);
  flex:none;font-variant-numeric:tabular-nums}
-.body{flex:1 1 auto;min-height:0;overflow-y:auto;padding:22px 24px 24px;scrollbar-width:thin}
+.body{flex:1 1 auto;min-height:0;overflow-y:auto;padding:20px 24px 22px;scrollbar-width:thin}
 .ask{font-family:var(--display);font-size:clamp(19px,3.2vw,24px);font-weight:600;line-height:1.3;
  letter-spacing:-.25px}
 .termname{font-family:var(--display);font-size:clamp(27px,5.6vw,40px);font-weight:700;line-height:1.1;
@@ -424,7 +424,23 @@ function render(){
   Bk.appendChild(cueB);
 
   acts(it);
+  sizeCard(false);
 }
+
+/* the card grows to whatever the longest side needs, so nothing is cut off */
+function sizeCard(){
+  function need(face){
+    var cap=face.querySelector('.cap'), body=face.querySelector('.body'), cue=face.querySelector('.flipcue');
+    return (cap?cap.offsetHeight:0)+(body?body.scrollHeight:0)+(cue?cue.offsetHeight:0)+6;
+  }
+  var face = S.turned ? $('faceB') : $('faceA'), f=$('flip');
+  var h = Math.max(need(face), 300)+'px';
+  if(arguments[0]===false){           // a new question: resize instantly, no animation
+    var t=f.style.transition; f.style.transition='none';
+    f.style.height=h; void f.offsetHeight; f.style.transition=t;
+  } else f.style.height=h;
+}
+window.addEventListener('resize',function(){ if(!$('play').hidden) sizeCard(); });
 
 function acts(it){
   var h=$('acts'); h.textContent='';
@@ -441,7 +457,7 @@ function pick(it,i,og){
     if(j===it.d.a)o.classList.add('r'); else if(j===i)o.classList.add('w');
   });
   S.pending=(i===it.d.a);
-  setTimeout(function(){ S.turned=true; $('flip').classList.add('on'); acts(it); },430);
+  setTimeout(function(){ S.turned=true; $('flip').classList.add('on'); acts(it); sizeCard(); },430);
 }
 
 function mark(it,ok){
